@@ -1,0 +1,19 @@
+def check_code(request):
+   from io import BytesIO
+   from utils.random_check_code import rd_check_code
+   img, code = rd_check_code()
+   stream = BytesIO()
+   img.save(stream, 'png')
+   request.session['code'] = code
+   return HttpResponse(stream.getvalue())
+
+
+加字体
+
+
+前端：  img：<img src="/check_code.html" >
+
+后端：
+	url：url(r'^check_code.html$', views.check_code),
+	字体：放置在项目中（不能放在static，utils中）
+	新建文件夹utils，导入random_check_code.py文件

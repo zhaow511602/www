@@ -1,0 +1,16 @@
+$(function () {
+        bindAvatar();
+    });
+
+    function bindAvatar(){
+        $('#imgSelect').change(function(){
+            var obj = $(this)[0].files[0];
+
+            var reader = new FileReader();
+            reader.onload = function(){
+                $('#previewImg').attr('src',this.result);
+            };
+            reader.readAsDataURL(obj);
+        })
+
+    }

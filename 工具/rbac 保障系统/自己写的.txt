@@ -1,0 +1,88 @@
+def login(request):
+    if request.method == 'GET':
+        return render(request,'login.html')
+    else:
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = models.UserInfo.objects.filter(user__username=username,user__password=password).first()
+
+        if user:
+            request.session['userinfo']={'username':username,'nid':user.id,'nickname':user.nickname}
+            initial_permission(request,user.user_id)
+            return render(request,'index.html')
+        else:
+            return redirect('/login.html')
+
+def index(request):
+    user = request.session.get('userinfo')
+    if user:
+        return render(request,'index.html')
+    return redirect('/login.html')
+
+def trouble(request):
+    # request.permission_code_list
+    if request.permission_code == "LOOK":
+        order_list = models.Order.objects.filter(create_user_id=request.session.get('userinfo')['nid'])
+        return render(request, 'trouble.html',{'order_list':order_list})
+    elif request.permission_code == "EDIT":
+        nid = request.GET.get('nid')
+        user_id = request.session.get('userinfo')['nid']
+        models.Order.objects.filter()
+    elif request.permission_code == "POST":
+        if request.method == 'GET':
+            return render(request, 'trouble_add.html')
+        else:
+            title = request.POST.get('title')
+            content = request.POST.get('content')
+            user_id = request.session['userinfo']['nid']
+            result = models.Order.objects.create(title=title,detail=content,create_user_id=user_id)
+            if result:
+                return redirect('/trouble.html')
+            else:
+                return HttpResponse('创建失败')
+        # 查看详情
+    elif request.permission_code == "DETAIL":
+        if request.method == 'GET':
+            order_id = request.GET.get('nid')
+            order = models.Order.objects.filter(id=order_id).extra(
+                select={'ct': "strftime('%%Y-%%m-%%d %%H:%%m:%%s',ctime)"}).first()
+            return render(request, 'edit_trouble.html', {'order': order})
+    return redirect('/login.html')
+
+import datetime
+def trouble_kill(request):
+    if request.permission_code == "LOOK":
+        order_list = models.Order.objects.filter(Q(status=1)|Q(status=2)).order_by('status')
+        return render(request, 'trouble.html',{'order_list':order_list})
+
+    elif request.permission_code == "EDIT":
+        if request.method == 'GET':
+            #从session中获取user_id，GET中获取订单id
+            user_id = request.session.get('userinfo')['nid']
+            order_id = request.GET.get('nid')
+            # 自己进入自己抢到的订单
+            order= models.Order.objects.filter(id=order_id).first()
+            if order.status == 2:
+                if order.processor_id == user_id:
+                    return render(request, 'edit_trouble.html', {'order': order})
+                else:
+                    return HttpResponse('订单不是您的，无权查看')
+            elif order.status ==1:
+                #用状态，订单号（前端a标签传值?md=edit&nid={{row.id}}） 查找，进行修改（状态，处理人）
+                result = models.Order.objects.filter(status=1,id=order_id).update(status=2,processor_id=user_id)
+                if result:
+                    order = models.Order.objects.filter(id=order_id,status=2).first()
+                    return render(request,'edit_trouble.html',{'order':order})
+                else:
+                    return HttpResponse("手慢了")
+            return HttpResponse('..')
+        else:
+            #回复
+            order_id = request.GET.get('nid')
+            user_id = request.session.get("userinfo")['nid']
+            content = request.POST.get('content')
+            result = models.Order.objects.filter(id=order_id, processor_id=user_id).update(solution=content,                                                                                           ptime=datetime.datetime.now())
+            if result:
+                return HttpResponse('回复成功！')
+            else:
+                return HttpResponse('回复失败！')

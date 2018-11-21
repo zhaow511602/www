@@ -1,0 +1,13 @@
+# 分页 开始
+        condition = {}
+
+        from utils.my_page import PageInfo
+        all_count = self.model_class.objects.filter(**condition).count()
+        base_page_url = reverse("{2}:{0}_{1}_changelist".format(self.app_label, self.model_name, self.site.namespace))
+        page_param_dict = copy.deepcopy(request.GET)
+        page_param_dict._mutable = True
+
+        page_obj = PageInfo(request.GET.get('page'),all_count,base_page_url,page_param_dict)
+        result_list = self.model_class.objects.filter(**condition)[page_obj.start:page_obj.end]
+
+        # 分页结束

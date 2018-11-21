@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <h1>原生Ajax上传文件</h1>
+    <input type="file" id="i1" />
+    <a onclick="upload1();">上传</a>
+    <div id="container1"></div>
+
+    <h1>jQuery Ajax上传文件</h1>
+    <input type="file" id="i2" />
+    <a onclick="upload2();">上传</a>
+    <div id="container2"></div>
+
+    <h1>伪 Ajax上传文件</h1>
+    <form id="f1" method="POST" action="/upload/" target="ifr" enctype="multipart/form-data">
+        <iframe id="ifr" name="ifr" style="display: none"></iframe>
+        <input type="file" name="fafafa" />
+        <a onclick="upload3();">上传</a>
+    </form>
+    <div id="container3"></div>
+
+    <script src="/static/jquery-1.12.4.js"></script>
+    <script>
+
+        function upload1(){
+            var formData = new FormData();
+            formData.append('k1','v1');
+            formData.append('fafafa',document.getElementById('i1').files[0]);
+
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4){
+                    var  file_path = xhr.responseText;
+                    var tag = document.createElement('img');
+                    tag.src = "/"+ file_path;
+                    document.getElementById('container1').appendChild(tag);
+
+                }
+            };
+            xhr.open('POST','/upload/');
+            xhr.send(formData);
+        }
+
+        function upload2(){
+            var formData = new FormData();
+            formData.append('k1','v1');
+            // formData.append('fafafa',document.getElementById('i1').files[0]);
+            formData.append('fafafa',$('#i2')[0].files[0]);
+            // $('#i2') -> $('#i2')[0]
+            // document.getElementById('i1') -> $(document.getElementById('i1'))
+
+            $.ajax({
+                url: '/upload/',
+                type: 'POST',
+                data: formData,
+                contentType:false,
+                processData:false,
+                success:function(arg){
+                    var tag = document.createElement('img');
+                    tag.src = "/"+ arg;
+                    $('#container2').append(tag);
+                }
+            })
+        }
+
+         function upload3(){
+            document.getElementById('ifr').onload = loadIframe;
+            document.getElementById('f1').submit();
+
+        }
+        function loadIframe(){
+            var content = document.getElementById('ifr').contentWindow.document.body.innerText;
+             var tag = document.createElement('img');
+            tag.src = "/"+ content;
+            $('#container3').append(tag);
+        }
+    </script>
+</body>
+</html>

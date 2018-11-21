@@ -1,0 +1,153 @@
+
+原理：
+	1. 简单管理
+
+	2. 角色多管理（权限）
+		a. 登录
+			session放置用户信息（检测是否已经登录）
+			session放置权限信息（检测是否有权访问）
+				{
+					'/index.html':[GET,EDIT],
+					'/order.html':[GET,EDIT],
+					'/xxx.html':[GET,EDIT...],
+					'/xxx.html':[GET,EDIT...],
+					'/xxx.html':[GET,EDIT...],
+					'/xxx.html':[GET,EDIT...],
+					'/xxx.html':[GET,EDIT...],
+					'/xxx.html':[GET,EDIT...],
+					'/xxx.html':[GET,EDIT...],
+					'/xxx.html':[GET,EDIT...],
+					'/xxx.html':[GET,EDIT...],
+					'/xxx.html':[GET,EDIT...],
+					'/xxx.html':[GET,EDIT...],
+				}
+				
+			session放置菜单权限信息（用于生成动态多级菜单）
+			
+		b. 访问网站其他功能: http://www.baiuc.om/xxx.hmtl
+			- 获取当前访问的URL, request.path_info
+			- 
+					/xxx.hmtl?md=get
+				匹配1
+					/xxx.hmtl
+					session放置权限信息（检测是否有权访问）
+					{
+						'/index.html':[GET,EDIT],
+						'/order.html':[GET,EDIT],
+						'/xxx.html':[GET,EDIT...],
+					}
+					
+				匹配2
+					/xxx.hmtl
+					session放置权限信息（检测是否有权访问）
+					{
+						'/index.html':[GET,EDIT],
+						'/order.html':[GET,EDIT],
+						'/xxx.html':[GET,EDIT...],
+					}
+				
+				request.permission_code = "EDIT"
+				request.permission_code_list = [GET,EDIT...]
+				
+				
+				PS: 中间件实现
+				
+		c. 视图函数
+		
+				def xxx(request):
+					request.permission_code = "EDIT"			  # 业务逻辑的编写
+					request.permission_code_list = [GET,EDIT...]  # 前端显示功能按钮
+					
+		d. 模板
+		
+		
+		e. 创建动态菜单【多级菜单】
+				session中获取菜单权限信息（用于生成动态多级菜单）
+					- 当前用户权限
+					- 所有菜单
+				1. 权限挂到菜单上
+				2. 菜单父子关系处理
+				3. 递归生成菜单
+				
+				辅助：
+					css
+					js
+					
+				
+				推荐：simple_tag
+		
+	
+	
+使用：
+	1. 导入rbac
+		- 表
+		- 中间件
+		- service
+		- simple_tag
+		
+	2. 注册app
+	
+	3. 用户登录
+		  初始化权限信息： service.initail_permission(request,user_id)
+		  
+		  
+	4. settings中配置中间件
+	
+	5. {% rbac_menu reqeust %}
+			
+		
+	其他配置：
+		...
+		
+	
+具体功能：
+	临时工：
+		报障单     trouble.html
+			查看列表 	look
+			查看详细 	detail
+	
+	普通员工：
+		报障单     trouble.html
+			创建   		post
+			删除   		del
+			修改   		edit
+			查看列表 	look
+			查看详细 	detail
+		
+	运维人员：
+		报账单
+		解决报障单 trouble-kill.html
+		
+	总监：
+		报障单
+		解决报障单
+		报表       report.html
+
+总结：报障系统
+
+	量化内网运维人员工作量
+		1. 分角色
+		2. 三类用户：
+				普通用户
+				运维人员
+				总监
+		3. 知识库（必须会）
+		
+		4. 权限（公共组件） *****
+		
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+			
+			
+			
+			

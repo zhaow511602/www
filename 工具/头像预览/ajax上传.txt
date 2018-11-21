@@ -1,0 +1,9 @@
+Ajax上传
+         */
+        function bindAvatar1(){
+            $('#imgSelect').change(function(){
+                var obj = $(this)[0].files[0];
+                // Ajax发送后台，并获取路径
+                // img.src = 获取路径
+            })
+        }

@@ -1,0 +1,80 @@
+s4day91
+	
+今日内容：
+	- 权限管理（二）
+	- 报障单管理
+	
+1. 权限管理（二）
+	表：
+		用户
+		角色
+		用户角色关系
+		
+		菜单
+		权限
+		操作
+		角色权限操作关系
+		
+	功能：
+		- 权限控制
+		- 动态菜单
+		
+	原理：
+		- 权限控制
+			a. 登录时，获取当前用户所有权限，放置在Session中
+				request.session['rbac_permission_session_key'] = 'asdf'
+				{
+					'/index.html': [G,P...]
+				}
+			b. 其他请求，在session中检测是否具有权限
+				中间件 + 配置文件
+		- 动态菜单
+			a. 登录时，获取当前用户菜单和权限，放置在Session中
+			
+			b. 其他请求，在session中获取菜单，动态生成（simple_tag）
+				
+		
+2. 报障单管理
+	普通员工：
+		报障单     trouble.html
+			创建   		post
+			删除   		del
+			修改   		edit
+			查看列表 	look
+			查看详细 	detail
+		
+	运维人员：
+		报账单
+		解决报障单 trouble-kill.html
+		
+	总监：
+		报障单
+		解决报障单
+		报表       report.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+		
+		

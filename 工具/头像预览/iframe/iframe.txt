@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+    <form id="f1" method="POST" action="/fake_ajax/" target="ifr">
+        <iframe id="ifr" name="ifr" style="display: none"></iframe>
+        <input type="text" name="user" />
+        <a onclick="submitForm();">Ã·Ωª</a>
+    </form>
+
+    <script>
+        function submitForm(){
+            document.getElementById('ifr').onload = loadIframe;
+            document.getElementById('f1').submit();
+
+        }
+        function loadIframe(){
+            var content = document.getElementById('ifr').contentWindow.document.body.innerText;
+            alert(content);
+        }
+    </script>
+</body>
+</html>

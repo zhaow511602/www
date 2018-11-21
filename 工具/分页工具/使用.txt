@@ -1,0 +1,27 @@
+ 后端    all_count = models.UserInfo.objects.all().count()
+
+     #总页数
+				#不填也可              总页数  每页显示几个  url  前后多少			
+         page_info = PageInfo(request.GET.get('page'),all_count,10,'/custom.html',11)
+  
+						 # 每页的开始值       结束值
+ 	 user_list = models.UserInfo.objects.all()[page_info.start():page_info.end()]
+
+   
+ 	 return render(request,'custom.html',{'user_list':user_list,'page_info':page_info})
+
+
+前端：
+	<h1>用户列表</h1>
+    <ul>
+        {% for row in user_list %}
+            <li>{{ row.name }}</li>
+        {% endfor %}
+    </ul>
+	
+#######这才是
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+          {{ page_info.pager|safe }}
+      </ul>
+    </nav>

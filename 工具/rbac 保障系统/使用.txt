@@ -1,0 +1,20 @@
+使用：
+	1. 导入rbac
+		- 表
+		- 中间件
+		- service
+		- simple_tag
+		
+	2. 注册app
+	
+	3. 用户登录
+		  初始化权限信息： service.initail_permission(request,user_id)
+		  
+		  
+	4. settings中配置中间件
+	
+	5. {% rbac_menu reqeust %}
+			
+		
+	其他配置：
+		...

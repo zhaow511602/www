@@ -1,0 +1,58 @@
+ $(function(){
+           bindAvatar();
+        });
+
+        function changeCode(ths){
+            ths.src = ths.src + "?";
+        }
+
+        function bindAvatar(){
+            if(window.URL.createObjectURL){
+                bindAvatar2();
+            }else if(window.FileReader){
+                bindAvatar3()
+            }else{
+                bindAvatar1();
+            }
+        }
+
+        /*
+        Ajax上传
+         */
+        function bindAvatar1(){
+            $('#imgSelect').change(function(){
+                var obj = $(this)[0].files[0];
+                // Ajax发送后台，并获取路径
+                // img.src = 获取路径
+            })
+        }
+
+        /*
+        本地上传预览
+         */
+        function bindAvatar2(){
+            $('#imgSelect').change(function(){
+                var obj = $(this)[0].files[0];
+                // Ajax发送后台，并获取路径
+                // img.src = 获取路径
+                var v = window.URL.createObjectURL(obj);
+                $('#previewImg').attr('src',v);
+                $('#previewImg').load(function(){
+                    window.URL.revokeObjectURL(v);
+                });
+
+            })
+        }
+
+        function bindAvatar3(){
+            $('#imgSelect').change(function(){
+                var obj = $(this)[0].files[0];
+                // Ajax发送后台，并获取路径
+                // img.src = 获取路径
+                var reader = new FileReader();
+                reader.onload = function(e){
+                    $('#previewImg').attr('src',this.result);
+                };
+                reader.readAsDataURL(obj);
+            })
+        }

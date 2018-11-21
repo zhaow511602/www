@@ -1,0 +1,18 @@
+ $(function () {
+        bindAvatar();
+    });
+
+    function bindAvatar(){
+        $('#imgSelect').change(function(){
+            var obj = $(this)[0].files[0];
+
+            var v =window.URL.createObjectURL(obj);
+            $('#previewImg').attr('src',v);
+            {#需要手动释放#}
+            $('#previewImg').load(function(){
+                window.URL.revokeObjectURL(v)
+            });
+
+        })
+
+    }

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <h1>Ê×Ò³</h1>
+    <input type="text" id="i1" />
+    +
+    <input type="text" id="i2" />
+    =
+    <input type="text" id="i3" />
+
+    <input type="button" id="btn1" value="jQuery Ajax" onclick="add1();" />
+    <input type="button" id="btn2" value="Ô­ÉúAjax" onclick="add2();" />
+
+    <script src="/static/jquery-1.12.4.js"></script>
+    <script>
+        function add1(){
+            $.ajax({
+                url: '/add1/',
+                type: 'POST',
+                data: {'i1': $('#i1').val(),'i2': $('#i2').val()},
+                success:function(arg){
+                    $('#i3').val(arg);
+                }
+            })
+        }
+
+        function add2(){
+            /*
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4){
+                    alert(xhr.responseText);
+                }
+            };
+            xhr.open('GET','/add2/?i1=12&i2=19');
+            xhr.send();
+            */
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4){
+                    alert(xhr.responseText);
+                }
+            };
+            xhr.open('POST','/add2/');
+            xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+            xhr.send("i1=12&i2=19");
+        }
+    </script>
+</body>
+</html>

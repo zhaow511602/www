@@ -1,0 +1,31 @@
+msg_list = [
+    {'id':1,'content':'xxx','parent_id':None},
+    {'id':2,'content':'xxx','parent_id':None},
+    {'id':3,'content':'xxx','parent_id':None},
+    {'id':4,'content':'xxx','parent_id':1},
+    {'id':5,'content':'xxx','parent_id':4},
+    {'id':6,'content':'xxx','parent_id':2},
+    {'id':7,'content':'xxx','parent_id':5},
+    {'id':8,'content':'xxx','parent_id':3},
+]
+
+# v = [row.setdefault('child',[]) for row in msg_list]
+# print(msg_list)
+msg_list_dict = {
+
+}
+
+for item in msg_list:
+	item['child'] = []
+	msg_list_dict[item['id']] = item
+
+# #### msg_list_dict用于查找,msg_list
+result = []
+for item in msg_list:
+	pid = item['parent_id']
+	if pid:
+		msg_list_dict[pid]['child'].append(item)
+	else:
+		result.append(item)
+
+# result就是最后结果
